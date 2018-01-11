@@ -1,0 +1,51 @@
+.mat-table {
+    overflow: auto;
+    max-height: 500px;
+  }
+  /* :host /deep/ ng2-smart-table tbody > tr > td:first-child {
+    color: #ED1C24;   
+    } */
+    /* :host /deep/ input { 
+      background-color: transparent;
+      border: none;
+      border-bottom: 2px solid #CCC;
+      color: #555;
+      box-sizing: border-box;
+      font-family: 'Arvo';
+      font-size: 18px;
+      height: 50px;
+      left: 50%;
+      margin: -25px 0 0 -100px;
+      padding: 10px 0px;
+      position: relative;
+      top: 50%;
+      width: 200px;    
+      &:focus {
+        outline: none;    
+      }
+      } */
+      /* :host /deep/ table { 
+      background-color: magenta;
+      } */
+    /* :host /deep/ ng2-smart-table tbody > tr > td {
+    color: #ED1C24;
+    background-color:#3c8dbc
+    }
+    :host /deep/ ng2-smart-table tbody > tr > th > a {
+    color: #ED1C24;
+    }
+    :host /deep/ a {color:yellow;  }
+    :host /deep/ a:link { color: #ED1C24; }
+    :host /deep/ a:hover { color: #ED1C24; }
+    :host /deep/ a:focus { color: #ED1C24; }
+    
+    :host /deep/ ng2-smart-table a { color:yellow;  }
+    :host /deep/ ng2-smart-table a:link { color:yellow;  }
+    :host /deep/ ng2-smart-table a:hover {color:yellow; }
+    :host /deep/ ng2-smart-table a:focus {color:yellow;  }
+    
+    :host /deep/ tr.ng2-smart-row a { color: #ED1C24; }
+    :host /deep/ tr.ng2-smart-row a:link { color: #ED1C24; }
+    :host /deep/ tr.ng2-smart-row a:hover { color:yellow; }
+    :host /deep/ tr.ng2-smart-row a:focus { color: #ED1C24; } */
+    

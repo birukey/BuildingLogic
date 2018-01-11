@@ -1,0 +1,57 @@
+<section class="content">
+  <div class="row">
+      <div class="col-md-12">             
+          <div class="box box-primary">
+              <div class="box-header with-border">
+                <h3 class="box-title">Table Tite</h3>                              
+                 <div class="box-tools pull-right">
+                  <button type="button" [disabled]="!selectedRow" class="btn btn-box-tool"(click)="openDialog()"><i class="fa fa-info"></i></button>
+                  <button type="button" [disabled]="!selectedRow"  class="btn btn-box-tool"  (click)="openDialog()"><i class="fa fa-pencil"></i></button>                     
+                  <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-plus-circle"></i></button>
+                  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-search"></i></button>
+                  <button type="button" class="btn btn-box-tool" (click)="togglefilter()"><i class="fa fa-indent"></i></button>              
+                </div>
+              </div>
+              <div class="box-body">           
+                  <!-- Table component -->                              
+                  <div class="example-container mat-elevation-z8"> 
+                      <div class="example-header" *ngIf="showSearch">
+                          <mat-form-field>
+                            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search... ">
+                          </mat-form-field>
+                     </div>                    
+                    <mat-table #table *ngIf="dataSource"  [dataSource]="dataSource" matSort>   
+                         <ng-container *ngFor="let col of displayedColumns" matColumnDef={{col}}>
+                            <div  *ngIf="col!='select'" >                             
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> {{ col |columnstitle }}</mat-header-cell>
+                                <mat-cell  *matCellDef="let row"> {{row[col]}}</mat-cell>
+                            </div> 
+                            <div *ngIf="col=='select'">                                               
+                                  <mat-header-cell *matHeaderCellDef [ngClass]="showColumn()">
+                                      <mat-checkbox (change)="$event ? masterToggle() : null"
+                                                    [checked]="selection.hasValue() && isAllSelected()"
+                                                    [indeterminate]="selection.hasValue() && !isAllSelected()">
+                                      </mat-checkbox>
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let row" [ngClass]="showColumn()">
+                                      <mat-checkbox  (click)="$event.stopPropagation()"
+                                                    (change)="$event ? selectRow($event,row) : null"
+                                                    [checked]="selection.isSelected(row)">
+                                      </mat-checkbox>
+                                    </mat-cell>
+                           </div>                  
+                        </ng-container>      
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                      </mat-table>
+                      <mat-paginator #paginator
+                                     [pageSize]="10"
+                                     [pageSizeOptions]="[5, 10, 20]">
+                      </mat-paginator>
+                    </div>
+              </div>
+             <!-- /.box-body -->
+            </div>
+      </div>
+  </div>  
+</section>
