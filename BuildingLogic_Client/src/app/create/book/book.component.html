@@ -1,0 +1,95 @@
+<div>
+  <form #createForm ="ngForm" (ngSubmit)="createItem(createForm)">     
+  <!-- TITLE -->
+  <div class="row">
+      <div class="col-xs-12 col-md-12">
+          <div class="panel panel-default">
+              <div class="panel-heading">
+                <h2 class="panel-title">{{model}} Registration </h2>
+              </div>
+             <div class="panel-body"> 
+               <div class="panel">              
+                  <div class="box-body">
+                      <input *ngIf="item._id"  type="hidden" required class="form-control" title="isbn" name="_id" #idControl="ngModel" placeholder="Enter Isbn number" [(ngModel)]= "item._id">
+                    <!-- LEFT SIDE FORM CONTROL ELEMENTS -->
+                    <div class="col-md-6">
+                        <div class="form-group" [class.has-warning]="isbnControl.invalid && isbnControl.touched"  [class.has-success]="isbnControl.valid">
+                            <label for="title" class="control-lable">Isbn</label>
+                            <input type="text" required class="form-control" title="isbn" name="isbn" #isbnControl="ngModel" placeholder="Enter Isbn number" [(ngModel)]= "item.isbn">
+                            <span *ngIf="isbnControl.invalid && isbnControl.touched" class="help-block">Required</span>
+                         </div>
+                          <div class="form-group">
+                            <label for="exampleInputPassword1">Title</label>
+                            <input type="text" class="form-control" id= "title" name="title" placeholder="Enter title" [(ngModel)]= "item.title">
+                          </div> 
+                          <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control" id="description" name="description" placeholder="Enter short discritpion" [(ngModel)]= "item.description">
+                          </div> 
+                          <div class="form-group" [class.has-error]="publicationControl.invalid && publicationControl.touched">
+                            <label class="control-label">Publication</label>
+                            <div class="form-control">
+                              <label class="radio-inline">
+                                <input type="radio" name="publication" required #publicationControl="ngModel"
+                                       value="published" [(ngModel)]="item.publication"> Published
+                              </label>
+                              <label class="radio-inline">
+                                <input type="radio" name="publication" required #publicationControl="ngModel"
+                                       value="unpublished" [(ngModel)]="item.publication"> Not Published
+                              </label>
+                            </div>
+                            <span class="help-block" *ngIf="publicationControl.invalid  && publicationControl.touched">
+                              Requierd
+                            </span>
+                          </div>
+                    </div> 
+                    <!-- END LEFT SIDE FORM CONTROL ELEMENTS  -->
+
+                    <!-- RIGHT SIDE FORM CONTROL ELEMENTS  -->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="published_year">Year of Publish</label>
+                            <input type="text" name="published_year" id="published_year" class="form-control" placeholder="Enter Year of Publication" [(ngModel)]= "item.published_year">
+                          </div>
+                          <div class="form-group">
+                            <label for="publisher">publisher</label>
+                            <input type="text" class="form-control" id="publisher" name="publisher" placeholder="Publisher" [(ngModel)]= "item.publisher">
+                          </div> 
+                          <div class="form-group">
+                            <label for="updated_date">Password</label>
+                            <input type="text" bsDatepicker [bsConfig]="datpickerConfig" class="form-control" id="updated_date"  name="updated_date" placeholder="updated_date" [(ngModel)]= "item.updated_date">
+                          </div> 
+                          <div class="form-group">
+                            <label for="author">Author</label>
+                            <input type="text" class="form-control" id="author"  name="author" placeholder="Author" [(ngModel)]= "item.author">
+                          </div> 
+                    </div>   
+                      <!-- END RIGHT SIDE FORM CONTROL ELEMENTS  -->   
+                      
+                    </div> 
+              </div>
+           </div>          
+              <div class="panel-footer">
+                  <div class="btn-group">
+                      <button type = "submit" [disabled] ="createForm.invalid" class="btn btn-primary">Submit</button>                  
+                   </div>
+                   <div class="btn-group">        
+                      
+                   </div>
+                  <div class="btn-group">                   
+                        <button type="button"  class="btn btn-warning" (click)="RouteNavigate()">Cancel</button>  
+                 </div>
+                 <div *ngIf="item._id" class="btn-group pull-right">                   
+                  <button type="button"  class="btn btn-danger pull-right" (click)="delete(item._id)">Delete</button>  
+              </div>
+                 <div class="btn-group">                   
+                  {{errorMessage}} 
+                  </div>
+           </div>
+              </div>
+            </div>
+      </div>
+  </form>
+
+</div>
+{{createForm.value |json}}

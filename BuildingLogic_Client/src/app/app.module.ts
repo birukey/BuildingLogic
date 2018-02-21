@@ -27,25 +27,52 @@ import { DialogComponent } from './dialog/dialog.component';
 import { MatDialogModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ConfigurationService } from './services/configuration.service';
 import { ColumnstitlePipe } from './pipes/columnstitle.pipe';
+import { BookComponent } from './create/book/book.component';
+import { CreateItemComponent } from './create/create-item.component';
+import { EditItemComponent } from './edit/edit-item.component';
 
 
 const appRoutes: Routes = [
-{path : 'dashboard' , component : DashboardComponent},
-{path : 'report' , component : ReportComponent},
-{path : 'contract' , component : ListitemComponent},
-{path : 'tenant' , component : ListitemComponent},
-{path : 'room' , component : ListitemComponent},
-{path : 'floor' , component : ListitemComponent},
-{path : 'block' , component : ListitemComponent},
-{path : 'appllication' , component : ListitemComponent},
-{path : 'user' , component : ListitemComponent},
-{path : 'role' , component : ListitemComponent},
-{path : 'application' , component : ListitemComponent},
-{path : 'permission' , component : ListitemComponent},
-{path : 'payment' , component : ListitemComponent},
-{path : '' , redirectTo: '/dashboard', pathMatch : 'full'}
+  {
+    path : 'search' ,
+    children: [
+          {
+            path: ':model',
+            component: ListitemComponent
+          }
+        ]
+},
+{
+  path : 'edit' ,
+  children: [
+        {
+          path: ':model/:id',
+          component: EditItemComponent
+        }
+      ]
+},
+{
+  path : 'delete' ,
+  children: [
+        {
+          path: ':model/:id',
+          component: ListitemComponent
+        }
+      ]
+},
+{
+  path : 'create' ,
+  children: [
+        {
+          path: ':model',
+          component: CreateItemComponent
+        }
+      ]
+},
+{path : '**' , redirectTo: '/dashboard', pathMatch : 'full'}
 ];
 
 @NgModule({
@@ -61,6 +88,11 @@ const appRoutes: Routes = [
     ListitemComponent,
     DialogComponent,
     ColumnstitlePipe,
+    BookComponent,
+    CreateItemComponent,
+    EditItemComponent,
+    EditItemComponent,
+
         ],
   imports: [
     BrowserModule, RouterModule.forRoot(appRoutes),
@@ -76,9 +108,10 @@ const appRoutes: Routes = [
         MatDialogModule,
         MatSortModule,
         FormsModule,
-        MatButtonModule
+        MatButtonModule,
+        BsDatepickerModule.forRoot()
        ],
-  entryComponents: [ DialogComponent ],
+  entryComponents: [ DialogComponent, BookComponent],
   providers: [CoreServiceService, ConfigurationService],
   bootstrap: [AppComponent]
 })

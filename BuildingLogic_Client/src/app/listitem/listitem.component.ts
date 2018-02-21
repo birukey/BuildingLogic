@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild, Inject} from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { filter } from 'rxjs/operator/filter';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DataSource } from 'ng2-smart-table/lib/data-source/data-source';
 import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
-import { CoreServiceService, Idata, User } from '../services/core-service.service';
+import { CoreServiceService } from '../services/core-service.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Element } from '@angular/compiler';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
@@ -16,8 +17,6 @@ import { ConfigurationService } from '../services/configuration.service';
   styleUrls: ['./listitem.component.css']
 })
 export class ListitemComponent implements OnInit {
-   // displayedColumns = ['position', 'name', 'weight', 'symbol'];
-   // displayedColumns = [ 'name', 'username', 'email', 'company name', 'select'];
   displayedColumns= null;
   dataSource = new MatTableDataSource();
   selection = new SelectionModel<any>(true, []);
@@ -25,7 +24,10 @@ export class ListitemComponent implements OnInit {
   showFilter: boolean;
   selectedRow: null;
   selectedRowKeys;
-  constructor (private _service: CoreServiceService, public dialog: MatDialog, private _config: ConfigurationService) {
+  errorMessage: string;
+  model: String;
+  constructor (private _router: ActivatedRoute, private _service: CoreServiceService,
+     public dialog: MatDialog, private _config: ConfigurationService, private routeNavigate: Router) {
     this.showSearch = true;
     this.showFilter = false;
    }
@@ -36,24 +38,30 @@ export class ListitemComponent implements OnInit {
    * be able to query its view for the initialized paginator.
    */
   ngOnInit () {
-     let _data = null;
-     this._service.getUser().subscribe(data => {
-       _data = data;
-       }, (err) => {
-        console.log('err', err);
+     let model = '';
+     let _data: any;
+     // OBSERVER OF URL CHANGES
+     this._router.params.subscribe(params => {
+      model = this._router.snapshot.params.model;
+      this._service.search(model).subscribe(data => {
+        console.log(data);
+        _data = data;
+         this.model = data.model;
+      }, (err) => {
+        this.dataSource =  new MatTableDataSource();
+        this.model = null;
+        this.errorMessage = err;
+        console.log(err);
       }, () => {
-        // CODE TO HANDLE ANY OPERAION AFTER DATA IS COMPLETELY LOADED
+      //  CODE TO HANDLE ANY OPERAION AFTER DATA IS COMPLETELY LOADED
        for (let index = 0; index < _data.length; index++) {
          const element =  this.normalizeData(_data[index]);
          _data[index] = element;
        }
-       this.dataSource.data = _data;
-       this.displayedColumns = this._config.columnsCofiguration.user;
-      //  for (const [key, value] of Object.entries(_data[0])) {
-      //    this.displayedColumns.push(key);
-      //  }
-       console.log(this.dataSource.data);
-      });
+          this.dataSource.data = _data.data;
+          this.displayedColumns = this._config.columnsCofiguration[_data.model];
+         });
+     });
     }
   // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
@@ -104,16 +112,14 @@ export class ListitemComponent implements OnInit {
     }
  }
  openDialog(): void {
-  let dialogRef = this.dialog.open(DialogComponent, {
+  const dialogRef = this.dialog.open(DialogComponent, {
     width: '200',
     // TO DO
     // call a method that formats the data for the dialog, load image for the dialog
     data: {data: this.selectedRow ? this.normalizeData( this.selectedRow) : null, keys : Object.keys(this.normalizeData( this.selectedRow))}
   });
- // tthis.selectedRowKeys = Object.keys(this.selectedRow);
-  this.normalizeData (this.selectedRow);
- // console.log(this.selectedRow);
-  dialogRef.afterClosed().subscribe(result => {
+   this.normalizeData (this.selectedRow);
+   dialogRef.afterClosed().subscribe(result => {
    console.log('The dialog was closed');
    console.log(this.objectKeys({name: 'birukd', sex: 'male'}));
    });
@@ -134,6 +140,21 @@ normalizeData(data: any): any {
    return normalform;
 }
 
+create(): void {
+    if (this.model) {
+    const url = '/create/' + this.model;
+    this.routeNavigate.navigate([url]);
+  }
+   }
+
+edit(id): void {
+  console.log('id is ...' + id);
+  if (this.model && id && this.selectedRow !== null) {
+    const url = '/edit/' + this.model + '/' + id;
+    console.log('Url  is ...' + url);
+    this.routeNavigate.navigate([url]);
+  }
+}
 objectKeys(obj) {
   return Object.keys(obj);
 }
